@@ -15,21 +15,15 @@ import java.util.Objects;
 
 public class BookingService {
 
-    private final AirportStore airportStore;
-    private final FlightStore flightStore;
-    private final FlightSeatStore flightSeatStore;
-    private final PassengerStore passengerStore;
+    private final EntityService entityService;
 
-    public BookingService() {
-        this.airportStore = new AirportStore();
-        this.flightSeatStore = new FlightSeatStore();
-        this.flightStore = new FlightStore();
-        this.passengerStore = new PassengerStore();
+    public BookingService(EntityService entityService) {
+        this.entityService = entityService;
     }
 
     public Airport addAirport(String name, String location) {
         Airport airport = new Airport(name, location);
-        airportStore.addAirport(airport);
+        entityService.addAirport(airport);
 
         return airport;
     }
@@ -39,14 +33,14 @@ public class BookingService {
         LocalDateTime departureTime
     ) {
         Flight flight = new Flight(flightNumber, numOfSeats, arrivalAirport, departureAirport, arrivalTime, departureTime);
-        flightStore.addFlight(flight);
+        entityService.addFlight(flight);
 
         return flight;
     }
 
     public void bookFlight(String name, String emailId, String phoneNumber, Flight flight, SeatType seatType) {
         Passenger passenger = new Passenger(name, emailId, phoneNumber);
-        passengerStore.addPassenger(passenger);
+        entityService.addPassenger(passenger);
 
         FlightSeat seat = getAvailableFlightSeat(flight, seatType);
 
@@ -55,7 +49,7 @@ public class BookingService {
             return;
         }
 
-        seat.setPassenger(passenger.getReferenceId());
+        seat.setPassenger(passenger.getId());
         seat.setStatus(SeatStatus.TAKEN);
 
         log(name, flight, seat);
@@ -66,17 +60,17 @@ public class BookingService {
             "Booking successful for passenger : %s, FlightNumber : %s, SeatNumber : %s, Price: %s, " +
                 "DepartureAirport: %s, ArrivalAirport: %s, Duration: %s minutes, DepartureTime: %s%n",
             name, flight.getFlightNumber(), seat.getSeatNumber(), seat.getPrice(),
-            airportStore.getAirportMap().get(flight.getDepartureAirport()).getName(),
-            airportStore.getAirportMap().get(flight.getArrivalAirport()).getName(), flight.durationInMinutes(),
+            entityService.getAirportMap().get(flight.getDepartureAirport()).getName(),
+            entityService.getAirportMap().get(flight.getArrivalAirport()).getName(), flight.durationInMinutes(),
             flight.getDepartureTime()
         );
     }
 
     private FlightSeat getAvailableFlightSeat(Flight flight, SeatType seatType) {
         return flight.getFlightSeats().stream()
-            .filter(it -> flightSeatStore.getFlightSeatMap().get(it).getStatus() == SeatStatus.AVAILABLE
-                              && seatType.equals(flightSeatStore.getFlightSeatMap().get(it).getSeatType()))
-            .map(it -> flightSeatStore.getFlightSeatMap().get(it))
+            .filter(it -> entityService.getFlightSeatMap().get(it).getStatus() == SeatStatus.AVAILABLE
+                              && seatType.equals(entityService.getFlightSeatMap().get(it).getSeatType()))
+            .map(it -> entityService.getFlightSeatMap().get(it))
             .findFirst()
             .orElse(null);
     }
@@ -85,7 +79,7 @@ public class BookingService {
         Flight flight, int price, SeatStatus seatStatus, SeatType seatType, String seatNumber
     ) {
         FlightSeat flightSeat = new FlightSeat(seatNumber, seatType, price, seatStatus);
-        flightSeatStore.addFlightSeat(flightSeat);
-        flight.addSeat(flightSeat.getReferenceId());
+        entityService.addFlightSeat(flightSeat);
+        flight.addSeat(flightSeat.getId());
     }
 }

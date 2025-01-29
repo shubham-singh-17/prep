@@ -10,9 +10,11 @@ import java.util.stream.IntStream;
 public class TestService {
 
     private final BookingService bookingService;
+    private final EntityService entityService;
 
     public TestService() {
-        this.bookingService = new BookingService();
+        this.entityService = new EntityService();
+        this.bookingService = new BookingService(entityService);
     }
 
     public void demo() {
@@ -41,8 +43,8 @@ public class TestService {
         LocalDateTime dummyDepartureTime = LocalDateTime.of(2024, 10, 2, 8, 0);
         String dummyFlightNumber = "ABC123";
 
-        Flight flight = bookingService.addFlight(dummyFlightNumber, 50, arrivalAirport.getReferenceId(),
-            departureAirport.getReferenceId(), dummyArrivalTime, dummyDepartureTime);
+        Flight flight = bookingService.addFlight(dummyFlightNumber, 50, arrivalAirport.getId(),
+            departureAirport.getId(), dummyArrivalTime, dummyDepartureTime);
 
         addSeats(flight);
 

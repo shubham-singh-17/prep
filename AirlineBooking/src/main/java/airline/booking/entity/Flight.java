@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Flight {
+public class Flight extends BaseEntity {
 
-    private final String referenceId;
     private final String flightNumber;
     private int numOfSeats;
     private String arrivalAirport; // This is airport referenceId
@@ -21,7 +20,7 @@ public class Flight {
         String flightNumber, int numOfSeats, String arrivalAirport, String departureAirport, LocalDateTime departureTime,
         LocalDateTime arrivalTime
     ) {
-        this.referenceId = UUID.randomUUID().toString();
+        super();
         this.flightNumber = flightNumber;
         this.numOfSeats = numOfSeats;
         this.arrivalAirport = arrivalAirport;
@@ -29,10 +28,6 @@ public class Flight {
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.flightSeats = new ArrayList<>();
-    }
-
-    public String getReferenceId() {
-        return referenceId;
     }
 
     public LocalDateTime getArrivalTime() {

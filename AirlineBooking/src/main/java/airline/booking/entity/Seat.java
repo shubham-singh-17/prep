@@ -2,12 +2,13 @@ package airline.booking.entity;
 
 import airline.booking.model.enums.SeatType;
 
-public class Seat {
+public abstract class Seat extends BaseEntity {
 
     private final String seatNumber;
     private SeatType seatType;
 
     public Seat(String seatNumber, SeatType seatType) {
+        super();
         this.seatNumber = seatNumber;
         this.seatType = seatType;
     }

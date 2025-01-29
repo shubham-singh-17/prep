@@ -6,7 +6,6 @@ import java.util.UUID;
 
 public class FlightSeat extends Seat {
 
-    private final String referenceId;
     private int price; // It should be a money object with currency mentioned
     private SeatStatus status;
     private String passenger; // Passenger referenceId
@@ -15,11 +14,6 @@ public class FlightSeat extends Seat {
         super(seatNumber, seatType);
         this.status = status;
         this.price = price;
-        this.referenceId = UUID.randomUUID().toString();
-    }
-
-    public String getReferenceId() {
-        return referenceId;
     }
 
     public SeatStatus getStatus() {
