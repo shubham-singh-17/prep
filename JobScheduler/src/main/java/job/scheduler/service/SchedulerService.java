@@ -17,7 +17,7 @@ public class SchedulerService {
     private final Lock queueLock;
     private final Condition entryAdded;
 
-    public SchedulerService(int threadCount) {
+    private SchedulerService(int threadCount) {
         this.jobPriorityQueue = new PriorityQueue<>();
         this.queueLock = new ReentrantLock();
         this.entryAdded = queueLock.newCondition();

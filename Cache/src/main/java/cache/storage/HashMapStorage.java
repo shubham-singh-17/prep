@@ -37,10 +37,6 @@ public class HashMapStorage<Key, Value> implements Storage<Key, Value> {
     }
 
     private boolean isStoreFull() {
-        if (store.size() == MAX_CAPACITY) {
-            return true;
-        }
-
-        return false;
+        return store.size() == MAX_CAPACITY;
     }
 }
